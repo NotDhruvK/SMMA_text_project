@@ -21,16 +21,29 @@ This project is designed to run continuously on a server, interfacing with the T
     ```
 
 ### 2. Configuration
-1. **Create a configuration file** (`src/config.py`) to store sensitive information like Twilio API keys and email credentials.
-    ```python
-    TWILIO_ACCOUNT_SID = 'your_account_sid'
-    TWILIO_AUTH_TOKEN = 'your_auth_token'
-    TWILIO_PHONE_NUMBER = 'your_twilio_phone_number'
-    EMAIL_HOST = 'your_email_host'
-    EMAIL_PORT = 587
-    EMAIL_HOST_USER = 'your_email@example.com'
-    EMAIL_HOST_PASSWORD = 'your_email_password'
+#### Setting Up Environment Variables
+
+This project uses environment variables to store sensitive information like API keys and email credentials. Follow these steps to set up your environment variables:
+
+1. Create a copy of the `.env.example` file and name it `.env`:
+    ```sh
+    cp .env.example .env
     ```
+
+2. Open the `.env` file and replace the placeholder values with your actual credentials:
+    ```plaintext
+    TWILIO_ACCOUNT_SID=your_actual_account_sid
+    TWILIO_AUTH_TOKEN=your_actual_auth_token
+    TWILIO_PHONE_NUMBER=your_actual_twilio_phone_number
+    EMAIL_HOST=your_actual_email_host
+    EMAIL_PORT=587
+    EMAIL_HOST_USER=your_actual_email@example.com
+    EMAIL_HOST_PASSWORD=your_actual_email_password
+    ```
+
+3. Save the `.env` file.
+
+By following these steps, you will ensure that your environment variables are correctly set up and your sensitive information remains secure.
 
 ### 3. CSV Handling
 1. **Write functions to read from and write to CSV files** (`src/csv_handler.py`).
@@ -78,3 +91,4 @@ This project is designed to run continuously on a server, interfacing with the T
 ### 9. Logging and Error Handling
 1. **Implement logging** for debugging and monitoring.
 2. **Add error handling** to ensure robustness.
+
