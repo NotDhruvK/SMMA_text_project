@@ -1,4 +1,4 @@
 twilio
 pandas
 schedule
-smtplib
+python-dotenv

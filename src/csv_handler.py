@@ -1,0 +1,9 @@
+import pandas as pd
+
+
+def read_csv(file_path):
+    return pd.read_csv(file_path)
+
+
+def write_csv(dataframe, file_path):
+    dataframe.to_csv(file_path, index=False)

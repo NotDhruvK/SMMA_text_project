@@ -1,16 +1,26 @@
-# This is a sample Python script.
-
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+from csv_handler import read_csv, write_csv
+from twilio_client import send_message
+from message_handler import handle_incoming_message
+from email_notifier import send_daily_summary
+from scheduler import schedule_tasks
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+def main():
+    # Load contacts
+    contacts = read_csv('data/contacts.csv')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    # Process contacts and send messages
+    for index, contact in contacts.iterrows():
+        # Logic to determine message
+        message = "Your custom message here"
+        send_message(contact['contact_number'], message)
+
+    # Handle responses and update CSVs
+    handle_incoming_message()
+
+    # Send daily summary
+    send_daily_summary()
+
+
+if __name__ == "__main__":
+    schedule_tasks(main)
