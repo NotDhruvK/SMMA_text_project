@@ -92,3 +92,28 @@ By following these steps, you will ensure that your environment variables are co
 1. **Implement logging** for debugging and monitoring.
 2. **Add error handling** to ensure robustness.
 
+## Additional Resources
+
+To help you get started with this project and understand the libraries used, here are some useful materials and tutorials:
+
+### Twilio API
+- [Twilio Documentation](https://www.twilio.com/docs): Comprehensive documentation on using the Twilio API.
+- [Twilio API for SMS](https://www.twilio.com/docs/sms/send-messages): Guide on how to send SMS messages using Twilio.
+
+### Python Libraries
+- [pandas Documentation](https://pandas.pydata.org/docs/): Official documentation for the pandas library, which is used for data manipulation and analysis.
+- [schedule Documentation](https://schedule.readthedocs.io/en/stable/): Documentation for the schedule library, which is used for scheduling tasks.
+- [python-dotenv Documentation](https://saurabh-kumar.com/python-dotenv/): Guide on how to use python-dotenv to manage environment variables.
+- [smtplib Documentation](https://docs.python.org/3/library/smtplib.html): Official documentation for smtplib, which is used for sending emails.
+
+### General Tutorials
+- [Automate the Boring Stuff with Python](https://automatetheboringstuff.com/): A great resource for learning Python with practical examples.
+- [Real Python Tutorials](https://realpython.com/): High-quality tutorials on various Python topics, including working with APIs and handling data.
+- [Full Stack Python](https://www.fullstackpython.com/): Comprehensive resource for learning how to build, deploy, and operate Python applications.
+
+### Learning Paths
+- [Python for Beginners](https://www.learnpython.org/): Interactive tutorials for beginners to learn Python.
+- [Official Python Tutorial](https://docs.python.org/3/tutorial/): The official Python tutorial from the Python Software Foundation.
+- [Codecademy Python Course](https://www.codecademy.com/learn/learn-python-3): An interactive course for learning Python.
+
+These resources should provide a solid foundation for understanding the libraries used in this project and for expanding your Python knowledge.
