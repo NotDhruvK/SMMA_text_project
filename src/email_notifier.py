@@ -9,15 +9,26 @@ def send_daily_summary():
     # This is just a placeholder function
     print("Sending daily summary...")
 
+    TO_EMAILS = ["dhruvadam@gmail.com","swayambeloskar@gmail.com"]
+    ATTACHMENT_FILE = "tosend.csv"
+
     subject = "Daily Summary"
     body = "Here is the summary of today's contacts."
 
     msg = MIMEMultipart()
     msg['From'] = EMAIL_HOST_USER
-    msg['To'] = 'your_email@example.com'  # Change to the recipient's email address
+    msg['To'] = ", ".join(TO_EMAILS)
     msg['Subject'] = subject
 
     msg.attach(MIMEText(body, 'plain'))
+
+    # Add attachment
+    with open(ATTACHMENT_FILE, 'rb') as f:
+    attachment = MIMEApplication(f.read(), Name=basename(ATTACHMENT_FILE))
+    encoders.encode_base64(attachment)
+    attachment['Content-Disposition'] = f'attachment; filename="{basename(ATTACHMENT_FILE)}"'
+    msg.attach(attachment)
+
 
     try:
         server = smtplib.SMTP(EMAIL_HOST, EMAIL_PORT)
