@@ -1,6 +1,9 @@
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
+from os.path import basename
+from email import encoders
 from config import EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
 
 
@@ -10,7 +13,7 @@ def send_daily_summary():
     print("Sending daily summary...")
 
     TO_EMAILS = ["dhruvadam@gmail.com","swayambeloskar@gmail.com"]
-    ATTACHMENT_FILE = "tosend.csv"
+    ATTACHMENT_FILE = "E:\\Business\\Agency\\textproject\\data\\tosend.csv"
 
     subject = "Daily Summary"
     body = "Here is the summary of today's contacts."
@@ -24,10 +27,10 @@ def send_daily_summary():
 
     # Add attachment
     with open(ATTACHMENT_FILE, 'rb') as f:
-    attachment = MIMEApplication(f.read(), Name=basename(ATTACHMENT_FILE))
-    encoders.encode_base64(attachment)
-    attachment['Content-Disposition'] = f'attachment; filename="{basename(ATTACHMENT_FILE)}"'
-    msg.attach(attachment)
+        attachment = MIMEApplication(f.read(), Name=basename(ATTACHMENT_FILE))
+        encoders.encode_base64(attachment)
+        attachment['Content-Disposition'] = f'attachment; filename="{basename(ATTACHMENT_FILE)}"'
+        msg.attach(attachment)
 
 
     try:
@@ -35,9 +38,13 @@ def send_daily_summary():
         server.starttls()
         server.login(EMAIL_HOST_USER, EMAIL_HOST_PASSWORD)
         text = msg.as_string()
-        server.sendmail(EMAIL_HOST_USER, 'your_email@example.com', text)
+        server.sendmail(EMAIL_HOST_USER, TO_EMAILS, text)
         server.quit()
 
         print("Email sent successfully.")
     except Exception as e:
         print(f"Failed to send email: {e}")
+
+
+if __name__ == "__main__":
+    send_daily_summary()
