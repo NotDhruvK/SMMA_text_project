@@ -46,5 +46,10 @@ def send_daily_summary():
         print(f"Failed to send email: {e}")
 
 
+def send_yesterday_summary():
+    pass
+
+'''
 if __name__ == "__main__":
     send_daily_summary()
+'''
