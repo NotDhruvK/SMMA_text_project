@@ -9,6 +9,20 @@ def today_date():
 	return date
 
 
+def yesterday_date():
+	today = datetime.today()
+	yesterday = today - timedelta(days=1)
+	date = yesterday.strftime('%Y-%m-%d')
+	return date
+
+
+def yester():
+	today = datetime.today()
+	yesterday = today - timedelta(days=1)
+	date = yesterday.strftime('%d %B, %Y')
+	return date
+
+
 def RA1date():
 	today = datetime.today()
 	RA1date = today - timedelta(days=7)
