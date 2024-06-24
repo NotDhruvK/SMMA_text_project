@@ -7,10 +7,16 @@ from email_notifier import send_yesterday_stats
 
 # Check if any leads qualify for past messages
 def check_past(dataframe, RA1date, RA2date, waiting_date):
+	'''
+		This function checks the number which have been contacted in the past
+		which are eligible to be contacted today
+
+		returns : integer
+	'''
 	old_messages = 0
 	for i in range(len(dataframe)):
-		if ((dataframe.loc[i, "In Campaign"] == "Reactivation 1" and dataframe.loc[i, "Contacted On"] == RA1date) 
-		or (dataframe.loc[i, "In Campaign"] == "Reactivation 2" and dataframe.loc[i, "Contacted On"] == RA2date) 
+		if ((dataframe.loc[i, "In Stage"] == "Reactivation 1" and dataframe.loc[i, "Contacted On"] == RA1date) 
+		or (dataframe.loc[i, "In Stage"] == "Reactivation 2" and dataframe.loc[i, "Contacted On"] == RA2date) 
 		or (dataframe.loc[i, "Status"] == "Waiting" and dataframe.loc[i, "Contacted On"] == waiting_date)):
 			
 			# print(dataframe.loc[i])
@@ -20,9 +26,16 @@ def check_past(dataframe, RA1date, RA2date, waiting_date):
 
 
 def set_status_today(dataframe, RA1Date, RA2Date, waiting_date, new_today):
+	'''
+		This function sets the status of the old messages which can be contacted today
+		as 'TODAY'.
+		It also set the status of leads to be contacted as 'TODAY' 
+
+		returns: NONE
+	'''
 	for i in range(len(dataframe)):
-		if ((dataframe.loc[i, "In Campaign"] == "Reactivation 1" and dataframe.loc[i, "Contacted On"] == RA1date) 
-		or (dataframe.loc[i, "In Campaign"] == "Reactivation 2" and dataframe.loc[i, "Contacted On"] == RA2date) 
+		if ((dataframe.loc[i, "In Stage"] == "Reactivation 1" and dataframe.loc[i, "Contacted On"] == RA1date) 
+		or (dataframe.loc[i, "In Stage"] == "Reactivation 2" and dataframe.loc[i, "Contacted On"] == RA2date) 
 		or (dataframe.loc[i, "Status"] == "Waiting" and dataframe.loc[i, "Contacted On"] == waiting_date)):
 
 			dataframe.loc[i, "Status"] = "TODAY"
@@ -41,6 +54,10 @@ def set_status_today(dataframe, RA1Date, RA2Date, waiting_date, new_today):
 
 # Send email about previous day stats
 def get_yesterday_stats(dataframe, yesterday_date):
+	'''
+		This funtion gets the status of the dabase right now 
+		returns : integers
+	'''
 	to_contact = 0
 	contacted_yesterday = 0
 	waiting_contacts = 0
@@ -60,7 +77,7 @@ def get_yesterday_stats(dataframe, yesterday_date):
 
 if __name__ == '__main__':
 	# get data from sheets
-	dataframe = trail_read().dropna(axis=0, how='all')
+	dataframe = get_database().dropna(axis=0, how='all')
 	print("Got data from sheets")
 
 	# set all the important dates
@@ -87,5 +104,5 @@ if __name__ == '__main__':
 
 	# Sets today status
 	set_status_today(dataframe, RA1date, RA2date, waiting_date, new_today)
-	print("Updates today's contacts")
+	print("Updated today's contacts")
 	print("Completed everyday.py")

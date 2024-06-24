@@ -1,6 +1,4 @@
 from config import TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER
-from csv_handler import read_csv, write_csv
-
 from twilio.rest import Client
 from twilio.twiml.messaging_response import MessagingResponse
 from flask import Flask, request, redirect
@@ -17,6 +15,9 @@ def sms_reply():
 
 	number = request.form['From']
 	message_body = request.form['Body']
+
+	# save to the database using "Contact" key
+		#  
 
 	resp = MessagingResponse()
 	resp.message("Hello {}, you said {}".format(number, message_body))

@@ -1,21 +1,20 @@
-from config import TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER
+from config import TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER, TWILIO_MSERVICE_SID
 from twilio.rest import Client
 from twilio.twiml.messaging_response import MessagingResponse
 from flask import Flask, request, redirect
-from sms_counter import SMSCounter
 
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 
-def send_message(to, body):
+def send_message(number, body):
     message = client.messages.create(
+        messaging_service_sid = TWILIO_MSERVICE_SID,
         body = body,
         from_= TWILIO_PHONE_NUMBER,
-        to = to
+        to = number
     )
     print(message.body)
     return message.sid
 
 if __name__ == "__main__":
-    counter = SMSCounter.count("Hello, This is a robbery")
-    print(counter)
+    pass
