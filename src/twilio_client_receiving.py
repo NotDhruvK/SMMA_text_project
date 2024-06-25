@@ -2,6 +2,7 @@ from config import TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER
 from twilio.rest import Client
 from twilio.twiml.messaging_response import MessagingResponse
 from flask import Flask, request, redirect
+from reply import big_daddy_reply
 
 app = Flask(__name__)
 
@@ -16,11 +17,10 @@ def sms_reply():
 	number = request.form['From']
 	message_body = request.form['Body']
 
-	# save to the database using "Contact" key
-		#  
+	message = big_daddy_reply(number, message_body) 
 
 	resp = MessagingResponse()
-	resp.message("Hello {}, you said {}".format(number, message_body))
+	resp.message(message)
 
 	return str(resp)
 

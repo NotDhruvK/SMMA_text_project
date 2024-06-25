@@ -11,8 +11,8 @@ def SMS_segment_counter(message):
 	'''
 	message_len = len(message.lower())
 	segments = math.ceil(message_len/160)
+	return segments
 
-	set_sms_segments(segments)
 	
 def sentiment_analyser(reply):
 	'''
@@ -39,22 +39,6 @@ def sentiment_analyser(reply):
 			elif key == 'positive':
 				return 1
 	return None
-
-
-def SMS_reply_big_sort(name, number):
-	'''
-		This function takes in the name and the number of an entry and then checks the database for similar entry
-		It then gets the status of the database variables and sets and appropriate message
-		returns : The message to send as String
-	'''
-	dataframe = get_database()
-	message = ""
-	# for new contacts
-	if (dataframe[(dataframe["Status"] == "TODAY") 
-		and pd.isna(dataframe["Last sent message"])]):
-
-		message = "Hello there"
-	pass
 
 
 if __name__ == "__main__":

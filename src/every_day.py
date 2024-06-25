@@ -77,7 +77,7 @@ def get_yesterday_stats(dataframe, yesterday_date):
 
 if __name__ == '__main__':
 	# get data from sheets
-	dataframe = get_database().dropna(axis=0, how='all')
+	dataframe = get_database()
 	print("Got data from sheets")
 
 	# set all the important dates

@@ -8,7 +8,7 @@ from googlefiles import get_sms_segments, set_sms_segments, get_database, get_ho
 
 if __name__ == "__main__":
 	# get the dataframe
-	dataframe = get_database().dropna(axis=0, how='all')
+	dataframe = get_database()
 
 	# retrieve contacts with the "Status" tag "TODAY" and store them in a list
 	hourly_rate = get_hourly_rate()
@@ -56,6 +56,7 @@ if __name__ == "__main__":
 			name = dataframe.loc[i, "Name"]
 			contact = dataframe.loc[i, "Phone"]
 			message = f"Hey just checking. Did you get my last message?"
+			# send_message(contact, message)
 
 			# Updating the database
 			count = count + SMS_segment_counter(message)
@@ -70,11 +71,12 @@ if __name__ == "__main__":
 		if ((dataframe.loc[i, "Status"] == "To Contact")
 			and (dataframe.loc[i, "In Stage"] == "Reactivation 2")):
 
-			# Sennding message to contact in reactivation 2
+			# Sending message to contact in reactivation 2
 			name = dataframe.loc[i, "Name"]
 			contact = dataframe.loc[i, "Phone"]
 			message = f"Hey… I feel like I'm drawing blanks here but would you be opposed to a quick chat regarding growing your business?"
-
+			# send_message(contact, message)
+			
 			# Updating the database
 			count = count + SMS_segment_counter(message)
 			datadrame.at[i, "Contacted On"] == date
@@ -88,14 +90,3 @@ if __name__ == "__main__":
 
 	update_sheets_database(dataframe)
 	print(f"Updated sheets database")
-
-	#get_hourly_message()
-	# for loop
-		# check message segments for the day
-			# if message_segments > 1800
-				# change all remaining "TODAY" tags to "To contact"
-			# else
-				# get message to send
-				# send message
-				# update database with last contact and message and positive
-				# update segments

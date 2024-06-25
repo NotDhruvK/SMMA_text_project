@@ -1,7 +1,7 @@
 import gspread
 from google.oauth2.service_account import Credentials
 import pygsheets
-import pandas
+import pandas as pd
 
 
 def return_client():
@@ -18,15 +18,20 @@ def return_client():
 	return client
 
 
-# Returns a pandas database object
 def get_database():
-	'''
-		Gets the csv format of a google sheet
-		returns : A pandas dataframe
-	'''
-	sheet_id = "1x7n58Z01pAjaNtOvYg3qOsWOLDrfDg9358Efv6Kwaok"
-	df = pandas.read_csv(f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv")
-	return df
+    '''
+    Gets the CSV format of a Google Sheet
+    returns : A pandas dataframe
+    '''
+    sheet_id = "1x7n58Z01pAjaNtOvYg3qOsWOLDrfDg9358Efv6Kwaok"
+    df = pd.read_csv(f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv")
+    dataframe = df.dropna(axis=0, how='all')
+    
+    # Convert the "Phone" series to strings with the desired format
+    if 'Phone' in dataframe.columns:
+        dataframe['Phone'] = dataframe['Phone'].apply(lambda x: str(int(x)) if pd.notna(x) else '')
+
+    return dataframe
 
 
 # The big daddy function to update the complete database
@@ -130,7 +135,7 @@ def change_one_cell(contact, body):
 		This function will first get a single row of the database, 
 		Change the values and then push to the database
 		It will also update the Status, Contacted on, Last recieved message and first and second positive values
-		
+
 		returns : None
 	'''
 	pass 
