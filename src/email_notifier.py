@@ -37,7 +37,7 @@ def send_daily_summary():
         print(f"Failed to send email: {e}")
 
 
-def send_yesterday_stats(yesterday_date, x, y, z, w):
+def send_yesterday_stats(yesterday_date, x, y, z, w, a):
     print("Sending yesterday's summary...")
 
     TO_EMAILS = ["dhruvadam@gmail.com"]
@@ -48,7 +48,8 @@ def send_yesterday_stats(yesterday_date, x, y, z, w):
             Leads remaining in the system: {x} \n
             Number of contacts contacted yesterday: {y} \n
             Number of new contacts to be contacted today: {w} \n
-            Number of contacts we are awaiting a response from: {z} \n\n
+            Number of contacts we are awaiting a response from: {z} \n
+            Number of segments used yesterday: {a} \n\n
             Regards, \n
             Machine
             '''

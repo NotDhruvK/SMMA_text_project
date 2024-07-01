@@ -1,7 +1,7 @@
 #imports
 import pandas as pd
 from date_counter import today_date, yesterday_date, yester, RA1date, RA2date, waiting_date
-from googlefiles import trail_read, update_info_sheet, update_sheets_database
+from googlefiles import get_database, update_info_sheet, update_sheets_database, set_sms_segments, get_sms_segments
 from email_notifier import send_yesterday_stats
 
 
@@ -48,8 +48,23 @@ def set_status_today(dataframe, RA1Date, RA2Date, waiting_date, new_today):
 			# print("inside .loc")
 			dataframe.at[i, "Status"] = "TODAY"
 		
-	update_sheets_database(dataframe)
+	return dataframe
 
+
+def update_waiting(dataframe, yesterday_date):
+	for i in range(200000):
+		if (i == len(dataframe)):
+			print("Error out of bounds")
+			break
+
+		if ((dataframe.loc[i, "Contacted On"] == yesterday_date) 
+			and (dataframe.loc[i, "Status"] == "TODAY")):
+
+			dataframe.at[i, "Status"] = "Waiting"
+			continue
+
+	print("Updated waiting contacts")
+	return dataframe
 
 
 # Send email about previous day stats
@@ -96,13 +111,17 @@ if __name__ == '__main__':
 	x, y, z = get_yesterday_stats(dataframe, yesterday)
 	w = new_today
 	yester = yester()
-	send_yesterday_stats(yester, x, y, z, w)
+	yester_segments = get_sms_segments()
+	#send_yesterday_stats(yester, x, y, z, w, yester_segments)
 
 	# Save INFO
 	update_info_sheet(new_today, 150)
+	set_sms_segments(0)
 	print("Saved to INFO sheet")
 
 	# Sets today status
-	set_status_today(dataframe, RA1date, RA2date, waiting_date, new_today)
+	dataframe = update_waiting(dataframe, yesterday)
+	dataframe = set_status_today(dataframe, RA1date, RA2date, waiting_date, new_today)
+	update_sheets_database(dataframe)
 	print("Updated today's contacts")
 	print("Completed everyday.py")

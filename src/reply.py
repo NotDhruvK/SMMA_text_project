@@ -70,6 +70,7 @@ def big_daddy_reply(contact, recieved_message):
 		returns : String which will be replied.
 
 	'''
+	recieved_message = recieved_message.lower()
 	dataframe = get_database()
 	print(dataframe)
 	date = today_date()
@@ -117,15 +118,16 @@ def big_daddy_reply(contact, recieved_message):
 			pass
 
 	message = get_message(phone, dataframe)
-	print(dataframe)
+	# print(dataframe)
 
 	# Print the message which will be sent
-	print(message)
+	print("Getting message based on dataframe")
+	print("Message : "  + message)
 
 	# Update the database
-	#update_sheets_database(dataframe)
+	update_sheets_database(dataframe)
 
-	#return message
+	return message
 
 if __name__ == "__main__":
 	big_daddy_reply("+19729617656", "yes")

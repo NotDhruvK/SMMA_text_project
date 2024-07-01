@@ -13,6 +13,7 @@ if __name__ == "__main__":
 	# retrieve contacts with the "Status" tag "TODAY" and store them in a list
 	hourly_rate = get_hourly_rate()
 	count = get_sms_segments()
+	count = int(count)
 	date = today_date()
 	#print(dataframe)
 
@@ -23,7 +24,7 @@ if __name__ == "__main__":
 			break
 
 		message_segments = get_sms_segments()
-		if (message_segments > 1800):
+		if (int(message_segments) > 1800):
 			print("Finished today's SMS limit")
 
 			if ((dataframe.loc[i, "Status"] == "TODAY")):
@@ -32,61 +33,79 @@ if __name__ == "__main__":
 			break
 
 
-		if ((dataframe.loc[i, "Status"] == "To Contact") 
+		if ((dataframe.loc[i, "Status"] == "TODAY") 
 			and pd.isna(dataframe.loc[i, "Last sent message"])):
 
 			# Sending message to a new contact
 			name = dataframe.loc[i, "Name"]
 			contact = dataframe.loc[i, "Phone"]
 			message = f"Hey {name}, this is Dhruv. I was wondering if you are still offering therapy?"
-			# send_message(contact, message)
+			send_message(contact, message)
 
 			# Updating the database
 			count = count + SMS_segment_counter(message)
-			datadrame.at[i, "Contacted On"] == date
-			dataframe.at[i, "Status"] == "Waiting"
-			dataframe.at[i, "In Stage"] == "Activation"
-			dataframe.at[i, "Last sent message"] == message
+			dataframe.at[i, "Contacted On"] = date
+			dataframe.at[i, "Status"] = "Waiting"
+			dataframe.at[i, "In Stage"] = "Activation"
+			dataframe.at[i, "Last sent message"] = message
 			continue
 
-		if ((dataframe.loc[i, "Status"] == "To Contact")
+		if ((dataframe.loc[i, "Status"] == "TODAY")
+			and (dataframe.loc[i, "In Stage"] == "Activation")
+			and pd.notna(dataframe.loc[i, "Last sent message"])):
+
+			# Sending message to contact in Activation but waiting
+			name = dataframe.loc[i, "Name"]
+			contact = dataframe.loc[i, "Phone"]
+			message = f"Hey just checking. Did you get my last message?"
+			send_message(contact, message)
+
+			# Updating the database
+			count = count + SMS_segment_counter(message)
+			dataframe.at[i, "Contacted On"] = date
+			dataframe.at[i, "Status"] = "Waiting"
+			dataframe.at[i, "In Stage"] = "Activation"
+			dataframe.at[i, "Last sent message"] = message
+			continue
+	
+
+		if ((dataframe.loc[i, "Status"] == "TODAY")
 			and (dataframe.loc[i, "In Stage"] == "Reactivation 1")):
 
 			# Sending message to contact in Reactivation 1
 			name = dataframe.loc[i, "Name"]
 			contact = dataframe.loc[i, "Phone"]
-			message = f"Hey just checking. Did you get my last message?"
-			# send_message(contact, message)
+			message = f"Hey you there?"
+			send_message(contact, message)
 
 			# Updating the database
 			count = count + SMS_segment_counter(message)
-			datadrame.at[i, "Contacted On"] == date
-			dataframe.at[i, "Status"] == "Waiting"
-			dataframe.at[i, "In Stage"] == "Reactivation 1"
-			dataframe.at[i, "Last sent message"] == message
+			dataframe.at[i, "Contacted On"] = date
+			dataframe.at[i, "Status"] = "Waiting"
+			dataframe.at[i, "In Stage"] = "Reactivation 1"
+			dataframe.at[i, "Last sent message"] = message
 			continue
 
 
 
-		if ((dataframe.loc[i, "Status"] == "To Contact")
+		if ((dataframe.loc[i, "Status"] == "TODAY")
 			and (dataframe.loc[i, "In Stage"] == "Reactivation 2")):
 
 			# Sending message to contact in reactivation 2
 			name = dataframe.loc[i, "Name"]
 			contact = dataframe.loc[i, "Phone"]
 			message = f"Hey… I feel like I'm drawing blanks here but would you be opposed to a quick chat regarding growing your business?"
-			# send_message(contact, message)
-			
+			send_message(contact, message)
+
 			# Updating the database
 			count = count + SMS_segment_counter(message)
-			datadrame.at[i, "Contacted On"] == date
-			dataframe.at[i, "Status"] == "Waiting"
-			dataframe.at[i, "In Stage"] == "Reactivation 2"
-			dataframe.at[i, "Last sent message"] == message
+			dataframe.at[i, "Contacted On"] = date
+			dataframe.at[i, "Status"] = "Waiting"
+			dataframe.at[i, "In Stage"] = "Reactivation 2"
+			dataframe.at[i, "Last sent message"] = message
 			continue
 
 	set_sms_segments(count)
 	print(f"Updated SMS segments to : {count}")
 
 	update_sheets_database(dataframe)
-	print(f"Updated sheets database")

@@ -3,6 +3,19 @@ import math
 from googlefiles import set_sms_segments, get_database
 
 
+def add_country_code(phone_number):
+    """
+    Adds '+1' to the beginning of the phone number.
+
+    Args:
+    phone_number (str): The phone number to which '+1' will be added.
+
+    Returns:
+    str: The phone number with '+1' added to the beginning.
+    """
+    return '+1' + phone_number
+
+
 def SMS_segment_counter(message):
 	'''
 		This function will calculate the sms segments in a string and set it 
@@ -24,20 +37,29 @@ def sentiment_analyser(reply):
 	sentiments = {
 						"positive" : [
 										"yes",
-										"thats right"
+										"thats right",
+										"yeah",
+										"that's right",
+										"great",
+										"thanks",
+										"thank you"
 									 ],
 						"negative" : [
 										"no",
-										"not interested"
+										"not interested",
+										"stop",
+										"unsubscribe",
+
 					 				 ]
 	}
 
 	for key, values in sentiments.items():
-		if reply in values:
-			if key == 'negative':
-				return 0
-			elif key == 'positive':
-				return 1
+		for value in values:
+			if value in reply:
+				if key == 'negative':
+					return 0
+				elif key == 'positive':
+					return 1
 	return None
 
 

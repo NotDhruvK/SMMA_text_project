@@ -31,6 +31,7 @@ def get_database():
     if 'Phone' in dataframe.columns:
         dataframe['Phone'] = dataframe['Phone'].apply(lambda x: str(int(x)) if pd.notna(x) else '')
 
+    print("Got Database")
     return dataframe
 
 

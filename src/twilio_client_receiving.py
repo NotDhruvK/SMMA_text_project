@@ -22,6 +22,8 @@ def sms_reply():
 	resp = MessagingResponse()
 	resp.message(message)
 
+	print(f"Replied to {number} with \n {message}")
+
 	return str(resp)
 
 if __name__ == "__main__":
