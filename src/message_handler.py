@@ -37,15 +37,20 @@ def sentiment_analyser(reply):
 	sentiments = {
 						"positive" : [
 										"yes",
+										"yea",
+										"yup",
 										"thats right",
 										"yeah",
 										"that's right",
 										"great",
 										"thanks",
-										"thank you"
+										"correct",
+										"works",
+										"cool"
 									 ],
 						"negative" : [
 										"no",
+										"nah",
 										"not interested",
 										"stop",
 										"unsubscribe",
