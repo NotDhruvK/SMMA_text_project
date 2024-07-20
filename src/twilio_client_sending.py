@@ -6,6 +6,18 @@ from message_handler import add_country_code
 
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
+"""
+messages: 
+    First basic message:
+        Hi {Name), Swam here from Cognicraft. We’re looking to partner up with ambitious practices keen on exponentially growing their revenue. Our Expert Program gets you 10-15+ new clients in the next 30-45 days guaranteed. Would that be something you might be interested in?
+
+    Second reply:
+        Would you mind if I give you a quick call in the next hour?
+
+    Reactivation 1 reply:
+        Hey just checking. Did you get my last message?
+
+"""
 
 def send_message(number, body):
     number = add_country_code(number)
@@ -18,3 +30,6 @@ def send_message(number, body):
     # print(message.body)
     return message.sid
 
+if __name__ == "__main__":
+    send_message(number, body)
+    pass
