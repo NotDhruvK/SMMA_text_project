@@ -3,6 +3,7 @@ from twilio.rest import Client
 from twilio.twiml.messaging_response import MessagingResponse
 from flask import Flask, request, redirect
 from reply import big_daddy_reply
+from time import sleep
 
 app = Flask(__name__)
 
@@ -17,7 +18,13 @@ def sms_reply():
 	number = request.form['From']
 	message_body = request.form['Body']
 
-	message = big_daddy_reply(number, message_body) 
+	message = big_daddy_reply(number, message_body)
+
+	if (message == "null"):
+		print(f"Negative response for {number}")
+		return 0 
+
+	time.sleep(35)
 
 	resp = MessagingResponse()
 	resp.message(message)

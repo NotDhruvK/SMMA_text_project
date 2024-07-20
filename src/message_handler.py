@@ -46,13 +46,17 @@ def sentiment_analyser(reply):
 										"thanks",
 										"correct",
 										"works",
-										"cool"
+										"cool",
+										"who is this",
+										"who"
 									 ],
 						"negative" : [
 										"no",
 										"nah",
+										"not",
 										"not interested",
 										"stop",
+										"sorry",
 										"unsubscribe",
 
 					 				 ]

@@ -39,6 +39,6 @@ if __name__ == "__main__":
 		send_15_min_stats(date, send_list)
 
 	# Update the Database
-	#update_sheets_database(dataframe)
+	update_sheets_database(dataframe)
 
 

@@ -15,6 +15,7 @@ if __name__ == "__main__":
 	count = get_sms_segments()
 	count = int(count)
 	date = today_date()
+	message_segments = get_sms_segments()
 	#print(dataframe)
 
 	for i in range(0, int(hourly_rate)):
@@ -23,7 +24,6 @@ if __name__ == "__main__":
 			print("Error data out of bounds")
 			break
 
-		message_segments = get_sms_segments()
 		if (int(message_segments) > 1800):
 			print("Finished today's SMS limit")
 
@@ -39,7 +39,7 @@ if __name__ == "__main__":
 			# Sending message to a new contact
 			name = dataframe.loc[i, "Name"]
 			contact = dataframe.loc[i, "Phone"]
-			message = f"Hey {name}, this is Dhruv. I was wondering if you are still offering therapy?"
+			message = f"Hey {name}! I was wondering if you are still offering therapy?"
 			send_message(contact, message)
 
 			# Updating the database
@@ -94,7 +94,7 @@ if __name__ == "__main__":
 			# Sending message to contact in reactivation 2
 			name = dataframe.loc[i, "Name"]
 			contact = dataframe.loc[i, "Phone"]
-			message = f"Hey… I feel like I'm drawing blanks here but would you be opposed to a quick chat regarding growing your business?"
+			message = f"Hey… I feel like I'm drawing blanks here but would you like to have a quick chat regarding growing your business?"
 			send_message(contact, message)
 
 			# Updating the database
@@ -109,3 +109,4 @@ if __name__ == "__main__":
 	print(f"Updated SMS segments to : {count}")
 
 	update_sheets_database(dataframe)
+	print("Completed every_hour.py")

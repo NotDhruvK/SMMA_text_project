@@ -23,7 +23,7 @@ def get_message(phone, dataframe):
 
 		returns : String as message
 	'''
-	messsage = ""
+	message = ""
 	for i in range(200000):
 		if (i == len(dataframe)):
 			break
@@ -40,7 +40,7 @@ def get_message(phone, dataframe):
 			elif ((dataframe.loc[i, "First Yes"] == "Done")
 				and (dataframe.loc[i, "In Stage"] == "Activation")):
 
-				message = """We are a marketing agency that helps therapists double their revenue in the next 60 days guarantee. We are running a special on our expert growth program rn. Would you be opposed to a quick call where I break down how this works?"""
+				message = """Hi {Name), Swam here from Cognicraft. We’re looking to partner up with ambitious practices keen on exponentially growing their revenue. Our Expert Program gets you 10-15+ new clients in the next 30-45 days guaranteed. Would that be something you might be interested in?"""
 				break
 			
 			# One Yes and Reactivation 1
@@ -110,10 +110,16 @@ def big_daddy_reply(contact, recieved_message):
 			if (dataframe.loc[i, "Phone"] == phone):
 				if (pd.isna(dataframe.loc[i, "First Yes"])):
 					dataframe.at[i, "Status"] = "Deleted"
+					message = "null"
+					update_sheets_database(dataframe)
+					return message
 					break
 
 				if (dataframe.loc[i, "First Yes"] == "Done"):
 					dataframe.at[i, "Status"] = "Removed"
+					message = "null"
+					update_sheets_database(dataframe)
+					return message
 					break
 			pass
 
@@ -132,4 +138,3 @@ def big_daddy_reply(contact, recieved_message):
 if __name__ == "__main__":
 	big_daddy_reply("+19729617656", "yes")
 	
-
