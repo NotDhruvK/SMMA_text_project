@@ -3,6 +3,7 @@ import pandas as pd
 from date_counter import today_date
 from twilio_client_sending import send_message
 from message_handler import SMS_segment_counter
+from twilio_client_sending import is_valid_us_phone_number
 from googlefiles import get_sms_segments, set_sms_segments, get_database, get_hourly_rate, update_sheets_database
 
 
@@ -16,12 +17,17 @@ if __name__ == "__main__":
 	count = int(count)
 	date = today_date()
 	message_segments = get_sms_segments()
+	message_count = 0
 	#print(dataframe)
 
-	for i in range(0, int(hourly_rate)):
+	for i in range(len(dataframe)):
 		# Breaking if i = len(dataframe)
 		if (i == len(dataframe)):
 			print("Error data out of bounds")
+			break
+
+		if (message_count == hourly_rate):
+			print(f"Sent the decided number of hourly messages.")
 			break
 
 		if (int(message_segments) > 1800):
@@ -40,7 +46,13 @@ if __name__ == "__main__":
 			name = dataframe.loc[i, "Name"]
 			contact = dataframe.loc[i, "Phone"]
 			message = f"Hey {name}! I was wondering if you are still offering therapy?"
-			send_message(contact, message)
+
+			#sending message
+			if (is_valid_us_phone_number(contact)):
+				send_message(contact, message)
+				message_count += 1
+			else:
+				print("Invalid Phone")
 
 			# Updating the database
 			count = count + SMS_segment_counter(message)
@@ -59,6 +71,7 @@ if __name__ == "__main__":
 			contact = dataframe.loc[i, "Phone"]
 			message = f"Hey just checking. Did you get my last message?"
 			send_message(contact, message)
+			message_count += 1
 
 			# Updating the database
 			count = count + SMS_segment_counter(message)
@@ -77,6 +90,7 @@ if __name__ == "__main__":
 			contact = dataframe.loc[i, "Phone"]
 			message = f"Hey you there?"
 			send_message(contact, message)
+			message_count += 1
 
 			# Updating the database
 			count = count + SMS_segment_counter(message)
@@ -96,6 +110,7 @@ if __name__ == "__main__":
 			contact = dataframe.loc[i, "Phone"]
 			message = f"Hey… I feel like I'm drawing blanks here but would you like to have a quick chat regarding growing your business?"
 			send_message(contact, message)
+			message_count += 1
 
 			# Updating the database
 			count = count + SMS_segment_counter(message)

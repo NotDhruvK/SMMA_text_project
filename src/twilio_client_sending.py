@@ -19,16 +19,32 @@ messages:
 
 """
 
+def is_valid_us_phone_number(phone_number: str) -> bool:
+    """
+    Check if the phone number is a valid US phone number without +1 and no spaces or separators.
+    
+    Args:
+    phone_number (str): The phone number to check.
+    
+    Returns:
+    bool: True if the phone number is valid, False otherwise.
+    """
+    return len(phone_number) == 10 and phone_number.isdigit()
+
+
 def send_message(number, body):
-    number = add_country_code(number)
-    message = client.messages.create(
-        messaging_service_sid = TWILIO_MSERVICE_SID,
-        body = body,
-        from_= TWILIO_PHONE_NUMBER,
-        to = number
-    )
-    # print(message.body)
-    return message.sid
+    if (is_valid_us_phone_number(number)):
+        number = add_country_code(number)
+        message = client.messages.create(
+            messaging_service_sid = TWILIO_MSERVICE_SID,
+            body = body,
+            from_= TWILIO_PHONE_NUMBER,
+            to = number
+        )
+        # print(message.body)
+        return message.sid
+    else:
+        return 0
 
 if __name__ == "__main__":
     send_message(number, body)

@@ -29,7 +29,7 @@ if __name__ == "__main__":
 			continue
 
 	print(send_list)
-	print(dataframe)
+	# print(dataframe)
 
 	# Send the list in an email
 	# Send email only if list of not empty
@@ -38,7 +38,5 @@ if __name__ == "__main__":
 	else:
 		send_15_min_stats(date, send_list)
 
-	# Update the Database
-	update_sheets_database(dataframe)
-
-
+		# Update the Database
+		update_sheets_database(dataframe)

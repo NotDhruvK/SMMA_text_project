@@ -40,7 +40,8 @@ def get_message(phone, dataframe):
 			elif ((dataframe.loc[i, "First Yes"] == "Done")
 				and (dataframe.loc[i, "In Stage"] == "Activation")):
 
-				message = """Hi {Name), Swam here from Cognicraft. We’re looking to partner up with ambitious practices keen on exponentially growing their revenue. Our Expert Program gets you 10-15+ new clients in the next 30-45 days guaranteed. Would that be something you might be interested in?"""
+				name = dataframe.loc[i, "Name"]
+				message = f"""Hi {name}, Swam here from Cognicraft. We’re looking to partner up with ambitious practices keen on exponentially growing their revenue. Our Expert Program gets you 10-15+ new clients in the next 30-45 days guaranteed. Would that be something you might be interested in?"""
 				break
 			
 			# One Yes and Reactivation 1
