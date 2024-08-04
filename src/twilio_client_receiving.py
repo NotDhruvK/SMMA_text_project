@@ -4,11 +4,19 @@ from twilio.twiml.messaging_response import MessagingResponse
 from flask import Flask, request, redirect
 from reply import big_daddy_reply
 from twilio_client_sending import send_message
+from celery_worker import make_celery
 import time
 
 app = Flask(__name__)
+app.config.update(
+    broker_url='redis://localhost:6379/0',
+    result_backend='redis://localhost:6379/0'
+)
+celery = make_celery(app)
 
+@celery.task
 def delayed_response(number, message_body):
+	print(f"Task received for number: {number} with message: {message_body}")
 	time.sleep(35)
 	message = big_daddy_reply(number, message_body)
 

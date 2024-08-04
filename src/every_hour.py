@@ -53,6 +53,7 @@ if __name__ == "__main__":
 				message_count += 1
 			else:
 				print("Invalid Phone")
+				continue
 
 			# Updating the database
 			count = count + SMS_segment_counter(message)
@@ -70,8 +71,13 @@ if __name__ == "__main__":
 			name = dataframe.loc[i, "Name"]
 			contact = dataframe.loc[i, "Phone"]
 			message = f"Hey just checking. Did you get my last message?"
-			send_message(contact, message)
-			message_count += 1
+			#sending message
+			if (is_valid_us_phone_number(contact)):
+				send_message(contact, message)
+				message_count += 1
+			else:
+				print("Invalid Phone")
+				continue
 
 			# Updating the database
 			count = count + SMS_segment_counter(message)
@@ -89,8 +95,13 @@ if __name__ == "__main__":
 			name = dataframe.loc[i, "Name"]
 			contact = dataframe.loc[i, "Phone"]
 			message = f"Hey you there?"
-			send_message(contact, message)
-			message_count += 1
+			#sending message
+			if (is_valid_us_phone_number(contact)):
+				send_message(contact, message)
+				message_count += 1
+			else:
+				print("Invalid Phone")
+				continue
 
 			# Updating the database
 			count = count + SMS_segment_counter(message)
@@ -109,8 +120,13 @@ if __name__ == "__main__":
 			name = dataframe.loc[i, "Name"]
 			contact = dataframe.loc[i, "Phone"]
 			message = f"Hey… I feel like I'm drawing blanks here but would you like to have a quick chat regarding growing your business?"
-			send_message(contact, message)
-			message_count += 1
+			#sending message
+			if (is_valid_us_phone_number(contact)):
+				send_message(contact, message)
+				message_count += 1
+			else:
+				print("Invalid Phone")
+				continue
 
 			# Updating the database
 			count = count + SMS_segment_counter(message)
