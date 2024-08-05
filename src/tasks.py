@@ -9,7 +9,7 @@ from celery_worker import celery
 def delayed_response(number, message_body):
     print(f"Task received for number: {number} with message: {message_body}")
     
-    time.sleep(35)
+    time.sleep(25)
     message = big_daddy_reply(number, message_body)
 
     if message == "null":

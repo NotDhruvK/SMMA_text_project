@@ -93,6 +93,7 @@ def big_daddy_reply(contact, recieved_message):
 				if (dataframe.loc[i, "First Yes"] == "Done"):
 					dataframe.at[i, "Second Yes"] = "Done"
 					dataframe.at[i, "Last recieved message"] = recieved_message
+					dataframe.at[i, "Contacted On"] = date
 
 					if ((dataframe.loc[i, "First Yes"] == "Done") and
 						(dataframe.loc[i, "Second Yes"] == "Done")):
@@ -104,6 +105,7 @@ def big_daddy_reply(contact, recieved_message):
 				else:
 					dataframe.at[i, "First Yes"] = "Done"
 					dataframe.at[i, "Last recieved message"] = recieved_message
+					dataframe.at[i, "Contacted On"] = date
 					break
 
 		# negative reply
@@ -111,6 +113,7 @@ def big_daddy_reply(contact, recieved_message):
 			if (dataframe.loc[i, "Phone"] == phone):
 				if (pd.isna(dataframe.loc[i, "First Yes"])):
 					dataframe.at[i, "Status"] = "Deleted"
+					dataframe.at[i, "Contacted On"] = date
 					message = "null"
 					update_sheets_database(dataframe)
 					return message
@@ -118,6 +121,7 @@ def big_daddy_reply(contact, recieved_message):
 
 				if (dataframe.loc[i, "First Yes"] == "Done"):
 					dataframe.at[i, "Status"] = "Removed"
+					dataframe.at[i, "Contacted On"] = date
 					message = "null"
 					update_sheets_database(dataframe)
 					return message
