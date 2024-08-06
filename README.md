@@ -5,115 +5,177 @@ This project is designed to run continuously on a server, interfacing with the T
 ## High-Level Steps
 
 ### 1. Project Setup
-1. **Initialize a new Python project**.
-2. **Set up a virtual environment**.
-    ```sh
-    python -m venv .venv
-    source .venv/bin/activate
-    ```
-3. **Install necessary libraries**.
-    ```sh
-    pip install twilio pandas schedule smtplib
-    ```
-4. **Create a requirements file**.
-    ```sh
-    pip freeze > requirements.txt
-    ```
+
+1. **Set up a virtual environment**.
+   ```sh
+   python -m venv .venv
+   source .venv/bin/activate
+   ```
+2. **Install necessary libraries**.
+   ```sh
+   pip install -r requirements.txt
+   ```
 
 ### 2. Configuration
+
 #### Setting Up Environment Variables
 
 This project uses environment variables to store sensitive information like API keys and email credentials. Follow these steps to set up your environment variables:
 
 1. Create a copy of the `.env.example` file and name it `.env`:
-    ```sh
-    cp .env.example .env
-    ```
+
+   ```sh
+   cp .env.example .env
+   ```
 
 2. Open the `.env` file and replace the placeholder values with your actual credentials:
-    ```plaintext
-    TWILIO_ACCOUNT_SID=your_actual_account_sid
-    TWILIO_AUTH_TOKEN=your_actual_auth_token
-    TWILIO_PHONE_NUMBER=your_actual_twilio_phone_number
-    EMAIL_HOST=your_actual_email_host
-    EMAIL_PORT=587
-    EMAIL_HOST_USER=your_actual_email@example.com
-    EMAIL_HOST_PASSWORD=your_actual_email_password
-    ```
+
+   ```plaintext
+   TWILIO_ACCOUNT_SID=your_actual_account_sid
+   TWILIO_AUTH_TOKEN=your_actual_auth_token
+   TWILIO_PHONE_NUMBER=your_actual_twilio_phone_number
+   EMAIL_HOST=your_actual_email_host
+   EMAIL_PORT=587
+   EMAIL_HOST_USER=your_actual_email@example.com
+   EMAIL_HOST_PASSWORD=your_actual_email_password
+   ```
 
 3. Save the `.env` file.
 
-By following these steps, you will ensure that your environment variables are correctly set up and your sensitive information remains secure.
+## Server Setup
 
-### 3. CSV Handling
-1. **Write functions to read from and write to CSV files** (`src/csv_handler.py`).
-    ```python
-    import pandas as pd
+### 1. Setting up the server
 
-    def read_csv(file_path):
-        return pd.read_csv(file_path)
+The server is used to keep the flask and the celery apps running while the sent SMS are awaiting a reply.
 
-    def write_csv(dataframe, file_path):
-        dataframe.to_csv(file_path, index=False)
-    ```
+1. Get an External IP and link it to your domain
+2. Create two screens using the command:
 
-### 4. Twilio Integration
-1. **Set up the Twilio client** (`src/twilio_client.py`) to send and receive messages.
-    ```python
-    from twilio.rest import Client
-    from config import TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER
+```sh
+screen -S "name_of_screen"
+```
 
-    client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+The first screen will house your Flask server.
+The sceond screen will house your redis and celery server.
 
-    def send_message(to, body):
-        message = client.messages.create(
-            body=body,
-            from_=TWILIO_PHONE_NUMBER,
-            to=to
-        )
-        return message.sid
-    ```
+#### Setting up NGINX
 
-### 5. Message Handling Logic
-1. **Define different text sequences and responses**.
-2. **Implement a state machine to handle multiple back-and-forth sequences** (`src/message_handler.py`).
+1. Use this command first:
 
-### 6. Categorization
-1. **Create functions to categorize contacts based on responses**.
-2. **Update the CSV files accordingly**.
+```sh
+sudo nano /etc/nginx/sites-available/flask_app
+```
 
-### 7. Email Notification
-1. **Implement logic to send daily email summaries** using an SMTP server (`src/email_notifier.py`).
+2. Then add the following configuration to the file:
 
-### 8. Scheduler
-1. **Set up a scheduler** (e.g., `schedule` or `APScheduler`) to run the script periodically (`src/scheduler.py`).
+```sh
+server {
+    listen 80;
+    server_name your_domain.com;  # Replace with your domain or IP address
 
-### 9. Logging and Error Handling
-1. **Implement logging** for debugging and monitoring.
-2. **Add error handling** to ensure robustness.
+    location / {
+        proxy_pass http://127.0.0.1:5000;  # Flask app running on port 5000
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
 
-## Additional Resources
+Save and Exit 3. Create a synbolic link to enable this site
 
-To help you get started with this project and understand the libraries used, here are some useful materials and tutorials:
+```sh
+sudo ln -s /etc/nginx/sites-available/flask_app /etc/nginx/sites-enabled
+```
 
-### Twilio API
-- [Twilio Documentation](https://www.twilio.com/docs): Comprehensive documentation on using the Twilio API.
-- [Twilio API for SMS](https://www.twilio.com/docs/sms/send-messages): Guide on how to send SMS messages using Twilio.
+4. Remove the default configuration if it exists
 
-### Python Libraries
-- [pandas Documentation](https://pandas.pydata.org/docs/): Official documentation for the pandas library, which is used for data manipulation and analysis.
-- [schedule Documentation](https://schedule.readthedocs.io/en/stable/): Documentation for the schedule library, which is used for scheduling tasks.
-- [python-dotenv Documentation](https://saurabh-kumar.com/python-dotenv/): Guide on how to use python-dotenv to manage environment variables.
-- [smtplib Documentation](https://docs.python.org/3/library/smtplib.html): Official documentation for smtplib, which is used for sending emails.
+```sh
+sudo rm /etc/nginx/sites-enabled/default
+```
 
-### General Tutorials
-- [Automate the Boring Stuff with Python](https://automatetheboringstuff.com/): A great resource for learning Python with practical examples.
-- [Real Python Tutorials](https://realpython.com/): High-quality tutorials on various Python topics, including working with APIs and handling data.
-- [Full Stack Python](https://www.fullstackpython.com/): Comprehensive resource for learning how to build, deploy, and operate Python applications.
+5. Test the NGINX server
 
-### Learning Paths
-- [Python for Beginners](https://www.learnpython.org/): Interactive tutorials for beginners to learn Python.
-- [Official Python Tutorial](https://docs.python.org/3/tutorial/): The official Python tutorial from the Python Software Foundation.
-- [Codecademy Python Course](https://www.codecademy.com/learn/learn-python-3): An interactive course for learning Python.
+```sh
+sudo nginx -t
+```
 
-These resources should provide a solid foundation for understanding the libraries used in this project and for expanding your Python knowledge.
+6. Restart the server
+
+```sh
+sudo systemctl restart nginx
+```
+
+After following these steps, you should be able to access the website via the domain.
+
+#### Pull all of your code onto the server
+
+```sh
+git clone "https://github.com/NotDhruvK/SMMA_text_project" text_project
+```
+
+This will clone all the files into the folder names text_project
+
+## Running the Server
+
+#### Start Redis server
+
+```sh
+redis-server
+```
+
+#### Check status of Redis Server
+
+```sh
+sudo lsof -i :6379
+```
+
+#### Ensuring Redis Server is working
+
+```sh
+sudo systemctl start redis
+```
+
+#### Run celery worker
+
+```sh
+celery -A celery_worker.celery worker --loglevel=info
+```
+
+#### Run the Flask server
+
+1. **Change out of the Celery screen using the command:**
+   `Ctrl + A + D`
+2. **Change in the Flask screen using the command:**
+
+```sh
+screen -r {name_of_flask_screen}
+```
+
+3. **Running the flask application**
+
+```sh
+python3 twilio_client_receiving.py
+```
+
+4. **Exit out of Flask screen**
+   `Ctrl + A + D`
+
+## Scheduling CRON jobs
+
+1. **Enter the command**
+
+```sh
+sudo crontab -e
+```
+
+2. **Add these three line to the end of the crontab**
+
+```
+*/15 * * * * /usr/bin/python3 /home/dhruvadam/textproject/src/every15mins.py >> /home/dhruvadam/textproject/cron.log 2>&1
+0 14-19 * * * /usr/bin/python3 /home/dhruvadam/textproject/src/every_hour.py >> /home/dhruvadam/textproject/cron.log 2>&1
+0 7 * * * /usr/bin/python3 /home/dhruvadam/textproject/src/every_day.py >> /home/dhruvadam/textproject/cron.log 2>&1
+```
+
+These will execute the files on the basis of the times provided in the first 5 characters on the statements.
